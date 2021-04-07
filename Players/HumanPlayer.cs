@@ -1,8 +1,9 @@
-﻿using System;
+﻿using RockPaperScissors.GameOptions;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RockPaperScissors.GameOptions
+namespace RockPaperScissors.Players
 {
     public class HumanPlayer : Player
     {

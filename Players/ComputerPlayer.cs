@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Threading;
+using RockPaperScissors.GameOptions;
 
-namespace RockPaperScissors.GameOptions
+namespace RockPaperScissors.Players
 {
     public class ComputerPlayer : Player
     {

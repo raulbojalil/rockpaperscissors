@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Text;
 using System.Linq;
 using RockPaperScissors.GameOptions;
+using RockPaperScissors.Players;
 using System.Threading;
 
 namespace RockPaperScissors
@@ -16,9 +17,7 @@ namespace RockPaperScissors
 
         public void Run()
         {
-            Console.WriteLine("--------------------------------");
-            Console.WriteLine("WELCOME TO ROCK-PAPER-SCISSORS!");
-            Console.WriteLine("--------------------------------");
+            PrintBanner();
 
             //To add a new game option type, add it to the GameOptions folder and implement the GameOption interface
             var gameOptions = GetGameOptions();
@@ -89,6 +88,13 @@ namespace RockPaperScissors
             Console.WriteLine($"CONGRATULATIONS {(firstPlayerScore > secondPlayerScore ? firstPlayer.GetFriendlyName() : secondPlayer.GetFriendlyName())}");
             Console.WriteLine("--------------------------------\n");
 
+        }
+
+        private void PrintBanner()
+        {
+            Console.WriteLine("--------------------------------");
+            Console.WriteLine("WELCOME TO ROCK-PAPER-SCISSORS!");
+            Console.WriteLine("--------------------------------");
         }
 
         private void PrintRules(GameOption[] options)
