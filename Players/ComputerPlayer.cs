@@ -7,14 +7,14 @@ using RockPaperScissors.GameOptions;
 
 namespace RockPaperScissors.Players
 {
-    public class ComputerPlayer : Player
+    public class ComputerPlayer : IPlayer
     {
         public string GetFriendlyName()
         {
             return "Computer";
         }
 
-        public GameOption PickOption(GameOption previousRoundOption, GameOption[] gameOptions)
+        public IGameOption PickOption(IGameOption previousRoundOption, IGameOption[] gameOptions)
         {
             //To simulate computer "thinking"
             Thread.Sleep(500);

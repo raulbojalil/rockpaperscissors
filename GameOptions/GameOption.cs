@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RockPaperScissors.GameOptions
 {
-    public interface GameOption
+    public interface IGameOption
     {
         /// <summary>
         /// Gets the friendly name of the Game Option
@@ -19,6 +19,6 @@ namespace RockPaperScissors.GameOptions
         /// </summary>
         /// <param name="opposingOption"></param>
         /// <returns>The outcome of the match</returns>
-        int HandleOpposingOption(GameOption opposingOption);
+        int HandleOpposingOption(IGameOption opposingOption);
     }
 }

@@ -43,7 +43,7 @@ namespace RockPaperScissors
             //We sleep to make it easier to see what's going on
             Thread.Sleep(1000);
 
-            GameOption previousSecondPlayerRoundOption = null;
+            IGameOption previousSecondPlayerRoundOption = null;
 
             while (firstPlayerScore != RoundsToWin && secondPlayerScore != RoundsToWin)
             {
@@ -97,7 +97,7 @@ namespace RockPaperScissors
             Console.WriteLine("--------------------------------");
         }
 
-        private void PrintRules(GameOption[] options)
+        private void PrintRules(IGameOption[] options)
         {
             Console.WriteLine("---------------------------------------");
             Console.WriteLine("PLEASE REVIEW THE RULES BEFORE PLAYING:");
@@ -124,7 +124,7 @@ namespace RockPaperScissors
             Console.WriteLine("---------------------------------------\n");
         }
 
-        private Player PickSecondPlayer(Player[] players)
+        private IPlayer PickSecondPlayer(IPlayer[] players)
         {
             var selectedOption = -1;
 
@@ -153,19 +153,19 @@ namespace RockPaperScissors
             return players[selectedOption - 1];
         }
 
-        private GameOption[] GetGameOptions()
+        private IGameOption[] GetGameOptions()
         {
             return Assembly.GetExecutingAssembly().GetTypes()
-                .Where(x => x.GetInterface(nameof(GameOption)) != null)
-                .Select(x => Activator.CreateInstance(x) as GameOption)
+                .Where(x => x.GetInterface(nameof(IGameOption)) != null)
+                .Select(x => Activator.CreateInstance(x) as IGameOption)
                 .ToArray();
         }
 
-        private Player[] GetPlayerTypes()
+        private IPlayer[] GetPlayerTypes()
         {
             return Assembly.GetExecutingAssembly().GetTypes()
-                .Where(x => x.GetInterface(nameof(Player)) != null)
-                .Select(x => Activator.CreateInstance(x) as Player)
+                .Where(x => x.GetInterface(nameof(IPlayer)) != null)
+                .Select(x => Activator.CreateInstance(x) as IPlayer)
                 .ToArray();
         }
     }

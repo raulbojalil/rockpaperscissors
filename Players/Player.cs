@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RockPaperScissors.Players
 {
-    public interface Player
+    public interface IPlayer
     {
         /// <summary>
         /// Gets the friendly name of the Player
@@ -17,6 +17,6 @@ namespace RockPaperScissors.Players
         /// Handles the logic of selecting an option
         /// </summary>
         /// <returns>The selected option</returns>
-        GameOption PickOption(GameOption previousRoundOption, GameOption[] gameOptions);
+        IGameOption PickOption(IGameOption previousRoundOption, IGameOption[] gameOptions);
     }
 }

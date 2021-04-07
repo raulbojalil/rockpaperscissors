@@ -7,7 +7,7 @@ using RockPaperScissors.GameOptions;
 
 namespace RockPaperScissors.Players
 {
-    public class RandomOptionComputerPlayer : Player
+    public class RandomOptionComputerPlayer : IPlayer
     {
         private Random _random = new Random();
 
@@ -16,7 +16,7 @@ namespace RockPaperScissors.Players
             return "Computer (which always selects a random option)";
         }
 
-        public GameOption PickOption(GameOption previousRoundOption, GameOption[] gameOptions)
+        public IGameOption PickOption(IGameOption previousRoundOption, IGameOption[] gameOptions)
         {
             //To simulate computer "thinking"
             Thread.Sleep(500);

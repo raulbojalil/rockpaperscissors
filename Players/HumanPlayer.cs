@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RockPaperScissors.Players
 {
-    public class HumanPlayer : Player
+    public class HumanPlayer : IPlayer
     {
         public string FriendlyName { get; private set; }
 
@@ -18,7 +18,7 @@ namespace RockPaperScissors.Players
             return FriendlyName;
         }
 
-        public GameOption PickOption(GameOption previousRoundOption, GameOption[] gameOptions)
+        public IGameOption PickOption(IGameOption previousRoundOption, IGameOption[] gameOptions)
         {
             var selectedOption = -1;
 

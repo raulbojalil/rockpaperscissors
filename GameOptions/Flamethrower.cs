@@ -4,14 +4,14 @@ using System.Text;
 
 namespace RockPaperScissors.GameOptions
 {
-    public class Flamethrower : GameOption
+    public class Flamethrower : IGameOption
     {
         public string GetFriendlyName()
         {
             return "Flamethrower";
         }
 
-        public int HandleOpposingOption(GameOption opposingOption)
+        public int HandleOpposingOption(IGameOption opposingOption)
         {
             //A Flamethrower beats paper and loses to rock and scissors.
             if (opposingOption is Rock) return 0;

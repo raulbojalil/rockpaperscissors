@@ -4,14 +4,14 @@ using System.Text;
 
 namespace RockPaperScissors.GameOptions
 {
-    public class Paper : GameOption
+    public class Paper : IGameOption
     {
         public string GetFriendlyName()
         {
             return "Paper";
         }
 
-        public int HandleOpposingOption(GameOption opposingOption)
+        public int HandleOpposingOption(IGameOption opposingOption)
         {
             if (opposingOption is Rock) return 1;
             else if (opposingOption is Paper) return -1;
