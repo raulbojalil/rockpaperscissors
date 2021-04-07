@@ -6,10 +6,8 @@ namespace RockPaperScissors.GameOptions
 {
     public class Flamethrower : IGameOption
     {
-        public string GetFriendlyName()
-        {
-            return "Flamethrower";
-        }
+        public override string ToString() => "Flamethrower";
+        public int GetSortOrder() => 3;
 
         public int HandleOpposingOption(IGameOption opposingOption)
         {

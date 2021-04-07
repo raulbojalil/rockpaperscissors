@@ -6,10 +6,8 @@ namespace RockPaperScissors.GameOptions
 {
     public class Paper : IGameOption
     {
-        public string GetFriendlyName()
-        {
-            return "Paper";
-        }
+        public override string ToString() => "Paper";
+        public int GetSortOrder() => 0;
 
         public int HandleOpposingOption(IGameOption opposingOption)
         {

@@ -11,10 +11,8 @@ namespace RockPaperScissors.Players
     {
         private Random _random = new Random();
 
-        public string GetFriendlyName()
-        {
-            return "Computer (which always selects a random option)";
-        }
+        public int GetSortOrder() => 2;
+        public override string ToString() => "Computer (which always selects a random option)";
 
         public IGameOption PickOption(IGameOption previousRoundOption, IGameOption[] gameOptions)
         {

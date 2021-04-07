@@ -8,15 +8,15 @@ namespace RockPaperScissors.Players
     public interface IPlayer
     {
         /// <summary>
-        /// Gets the friendly name of the Player
-        /// </summary>
-        /// <returns>The friendly name of the player</returns>
-        string GetFriendlyName();
-
-        /// <summary>
         /// Handles the logic of selecting an option
         /// </summary>
         /// <returns>The selected option</returns>
         IGameOption PickOption(IGameOption previousRoundOption, IGameOption[] gameOptions);
+
+        /// <summary>
+        /// The sort order of this item
+        /// </summary>
+        /// <returns></returns>
+        int GetSortOrder();
     }
 }

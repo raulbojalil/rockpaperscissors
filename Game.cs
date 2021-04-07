@@ -11,14 +11,8 @@ namespace RockPaperScissors
 {
     public class Game
     {
-        public int RoundsToWin { get; private set; }
-
-        public Game (int roundsToWin = 3) => RoundsToWin = roundsToWin;
-
-        public void Run()
+        public void Run(int roundsToWin = 3)
         {
-            PrintBanner();
-
             //To add a new game option type, add it to the GameOptions folder and implement the GameOption interface
             var gameOptions = GetGameOptions();
 
@@ -28,80 +22,102 @@ namespace RockPaperScissors
             PrintRules(gameOptions);
 
             var firstPlayer = new HumanPlayer("Human");
-
-            var secondPlayer = PickSecondPlayer(players);
+            var secondPlayer = ConsoleUtils.Prompt("Who do you want to play with?", players);
 
             var firstPlayerScore = 0;
             var secondPlayerScore = 0;
+            var currentRound = 0;
 
-            Console.WriteLine("\n---------------------------------------------------");
-            Console.WriteLine("THE GAME STARTS!");
-            Console.WriteLine($"{firstPlayer.GetFriendlyName()} VS {secondPlayer.GetFriendlyName()}");
-            Console.WriteLine($"First player to score {RoundsToWin} round(s) wins!");
-            Console.WriteLine("----------------------------------------------------\n");
+            PrintStartGameBanner(firstPlayer, secondPlayer, roundsToWin);
 
             //We sleep to make it easier to see what's going on
             Thread.Sleep(1000);
 
             IGameOption previousSecondPlayerRoundOption = null;
 
-            while (firstPlayerScore != RoundsToWin && secondPlayerScore != RoundsToWin)
+            while (firstPlayerScore != roundsToWin && secondPlayerScore != roundsToWin)
             {
+                currentRound++;
+                Console.WriteLine($"\n------ ROUND {currentRound} -------\n");
+
+                Thread.Sleep(500);
+
                 var firstPlayerOption = firstPlayer.PickOption(null, gameOptions);
 
-                Console.WriteLine($"\n{firstPlayer.GetFriendlyName()} picked {firstPlayerOption.GetFriendlyName()}");
+                Console.WriteLine($"\n{firstPlayer} picked {firstPlayerOption}");
 
                 var secondPlayerOption = secondPlayer.PickOption(previousSecondPlayerRoundOption, gameOptions);
                 previousSecondPlayerRoundOption = secondPlayerOption;
 
-                Console.WriteLine($"\n{secondPlayer.GetFriendlyName()} picked {secondPlayerOption.GetFriendlyName()}");
+                Console.WriteLine($"\n{secondPlayer} picked {secondPlayerOption}");
                 
                 Thread.Sleep(1000);
 
                 var roundOutcome = firstPlayerOption.HandleOpposingOption(secondPlayerOption);
 
-                Console.Write($"\n{firstPlayer.GetFriendlyName()} picked {firstPlayerOption.GetFriendlyName()} and {secondPlayer.GetFriendlyName()} picked {secondPlayerOption.GetFriendlyName()} so..., ");
+                firstPlayerScore += (roundOutcome == 1) ? 1 : 0;
+                secondPlayerScore += (roundOutcome == 0) ? 1 : 0;
 
-                if (roundOutcome != -1)
-                {
-                    Console.WriteLine(roundOutcome == 1
-                        ? $"{firstPlayer.GetFriendlyName()} wins this round!"
-                        : $"{secondPlayer.GetFriendlyName()} wins this round!");
-                    firstPlayerScore += (roundOutcome == 1) ? 1 : 0;
-                    secondPlayerScore += (roundOutcome == 0) ? 1 : 0;
-                }
-                else
-                    Console.WriteLine("it's a DRAW!, the game continues...");
+                PrintRoundOutcome(roundOutcome, firstPlayer, firstPlayerOption, secondPlayer, secondPlayerOption);
 
                 Thread.Sleep(1000);
 
-                Console.WriteLine("\n--------------------------------");
-                Console.WriteLine("Current score:");
-                Console.WriteLine($"{firstPlayer.GetFriendlyName()}: {firstPlayerScore} - {secondPlayer.GetFriendlyName()}: {secondPlayerScore}");
-                Console.WriteLine("--------------------------------\n");
+                PrintCurrentScore(firstPlayer, firstPlayerScore, secondPlayer, secondPlayerScore);
 
                 Thread.Sleep(1000);
             }
 
-            Console.WriteLine("\n--------------------------------");
-            Console.WriteLine("WE HAVE A WINNER!");
-            Console.WriteLine($"CONGRATULATIONS {(firstPlayerScore > secondPlayerScore ? firstPlayer.GetFriendlyName() : secondPlayer.GetFriendlyName())}");
-            Console.WriteLine("--------------------------------\n");
+            PrintWinner(firstPlayerScore > secondPlayerScore ? firstPlayer : secondPlayer, currentRound);
 
         }
 
-        private void PrintBanner()
+        private void PrintRoundOutcome(int roundOutcome, IPlayer firstPlayer, IGameOption firstPlayerOption, 
+            IPlayer secondPlayer, IGameOption secondPlayerOption)
         {
-            Console.WriteLine("--------------------------------");
-            Console.WriteLine("WELCOME TO ROCK-PAPER-SCISSORS!");
-            Console.WriteLine("--------------------------------");
+            Console.Write($"\n{firstPlayer} picked {firstPlayerOption} and {secondPlayer} picked {secondPlayerOption} so..., ");
+
+            if (roundOutcome != -1)
+            {
+                Console.WriteLine(roundOutcome == 1
+                    ? $"{firstPlayer} wins this round!"
+                    : $"{secondPlayer} wins this round!");
+            }
+            else
+                Console.WriteLine("it's a DRAW!, the game continues...");
+        }
+
+        private void PrintStartGameBanner(IPlayer firstPlayer, IPlayer secondPlayer, int roundsToWin)
+        {
+            Console.WriteLine("\n---------------------------------------------------" +
+                              "\nTHE GAME STARTS!" +
+                             $"\n{firstPlayer} VS {secondPlayer}" +
+                             $"\nFirst player to score {roundsToWin} round(s) wins!" +
+                              "\n----------------------------------------------------\n");
+        }
+
+        private void PrintCurrentScore(IPlayer firstPlayer, int firstPlayerScore, IPlayer secondPlayer, int secondPlayerScore)
+        {
+            Console.WriteLine("\n--------------------------------" +
+                              "\nCURRENT SCORE:" +
+                             $"\n{firstPlayer}: {firstPlayerScore} - {secondPlayer}: {secondPlayerScore}" +
+                              "\n--------------------------------\n");
+        }
+
+        private void PrintWinner(IPlayer player, int totalRounds)
+        {
+            Console.WriteLine("\n--------------------------------" +
+                              "\nWE HAVE A WINNER!" +
+                             $"\nCONGRATULATIONS {player}" +
+                             $"\nTOTAL ROUNDS: {totalRounds}" +
+                              "\n--------------------------------\n");
         }
 
         private void PrintRules(IGameOption[] options)
         {
-            Console.WriteLine("---------------------------------------");
-            Console.WriteLine("PLEASE REVIEW THE RULES BEFORE PLAYING:");
-            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("---------------------------------------" +
+                              "\nWELCOME TO ROCK - PAPER - SCISSORS!" +
+                              "\nPLEASE REVIEW THE RULES BEFORE PLAYING:" +
+                              "\n---------------------------------------");
 
             foreach(var option in options)
             {
@@ -112,45 +128,16 @@ namespace RockPaperScissors
 
                     switch (outcome)
                     {
-                        case 0: outcomeDisplay = "loses against"; break;
+                        case 0: outcomeDisplay = "loses to"; break;
                         case -1: outcomeDisplay = "has no effect against"; break;
                         case 1: outcomeDisplay = "beats"; break;
                     }
 
-                    Console.WriteLine($"{option.GetFriendlyName()} {outcomeDisplay} {rivalOption.GetFriendlyName()}");
+                    Console.WriteLine($"{option} {outcomeDisplay} {rivalOption}");
                 }
             }
 
             Console.WriteLine("---------------------------------------\n");
-        }
-
-        private IPlayer PickSecondPlayer(IPlayer[] players)
-        {
-            var selectedOption = -1;
-
-            Console.WriteLine($"Who do you want to play with?:");
-            Console.WriteLine("-------------------------------");
-
-            for (var i = 0; i < players.Length; i++)
-            {
-                Console.WriteLine($"{i + 1}: {players[i].GetFriendlyName()}");
-            }
-
-            while (selectedOption == -1)
-            {
-                Console.Write("\nYour choice: ");
-
-                var rawPickedOption = Console.ReadLine();
-
-                selectedOption = int.TryParse(rawPickedOption, out selectedOption) && selectedOption > 0 && selectedOption <= players.Length
-                    ? selectedOption
-                    : -1;
-
-                if (selectedOption == -1)
-                    Console.WriteLine("Invalid option, please try again.");
-            }
-
-            return players[selectedOption - 1];
         }
 
         private IGameOption[] GetGameOptions()
@@ -158,6 +145,7 @@ namespace RockPaperScissors
             return Assembly.GetExecutingAssembly().GetTypes()
                 .Where(x => x.GetInterface(nameof(IGameOption)) != null)
                 .Select(x => Activator.CreateInstance(x) as IGameOption)
+                .OrderBy(x => x.GetSortOrder())
                 .ToArray();
         }
 
@@ -166,6 +154,7 @@ namespace RockPaperScissors
             return Assembly.GetExecutingAssembly().GetTypes()
                 .Where(x => x.GetInterface(nameof(IPlayer)) != null)
                 .Select(x => Activator.CreateInstance(x) as IPlayer)
+                .OrderBy(x => x.GetSortOrder())
                 .ToArray();
         }
     }

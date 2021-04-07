@@ -9,10 +9,8 @@ namespace RockPaperScissors.Players
 {
     public class ComputerPlayer : IPlayer
     {
-        public string GetFriendlyName()
-        {
-            return "Computer";
-        }
+        public override string ToString() => "Computer";
+        public int GetSortOrder() => 0;
 
         public IGameOption PickOption(IGameOption previousRoundOption, IGameOption[] gameOptions)
         {
@@ -34,7 +32,7 @@ namespace RockPaperScissors.Players
             if (option == null)
                 throw new Exception("No suitable option found");
 
-            Console.WriteLine($"\nComputer says: Since I picked {previousRoundOption.GetFriendlyName()} before, I'm picking {option.GetFriendlyName()}!");
+            Console.WriteLine($"\nComputer says: Since I picked {previousRoundOption} before, I'm picking {option}!");
 
             return option;
         }

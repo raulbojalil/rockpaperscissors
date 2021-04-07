@@ -13,38 +13,12 @@ namespace RockPaperScissors.Players
 
         public HumanPlayer() => FriendlyName = "Human (P2)";
 
-        public string GetFriendlyName()
-        {
-            return FriendlyName;
-        }
+        public override string ToString() => FriendlyName;
+        public int GetSortOrder() => 1;
 
         public IGameOption PickOption(IGameOption previousRoundOption, IGameOption[] gameOptions)
         {
-            var selectedOption = -1;
-
-            Console.WriteLine($"\n{GetFriendlyName()}, pick an option:");
-            Console.WriteLine("------------------");
-
-            for (var i = 0; i < gameOptions.Length; i++)
-            {
-                Console.WriteLine($"{i+1}: {gameOptions[i].GetFriendlyName()}");
-            }
-
-            while (selectedOption == -1) {
-
-                Console.Write("\nYour choice: ");
-
-                var rawPickedOption = Console.ReadLine();
-
-                selectedOption = int.TryParse(rawPickedOption, out selectedOption) && selectedOption > 0 && selectedOption <= gameOptions.Length
-                    ? selectedOption
-                    : -1;
-
-                if (selectedOption == -1)
-                    Console.WriteLine("Invalid option, please try again.");
-            }
-
-            return gameOptions[selectedOption-1];
+            return ConsoleUtils.Prompt($"\n{FriendlyName}, pick an option: ", gameOptions);
         }
     }
 }
